@@ -1,6 +1,28 @@
 export class Snowflake {
+    private x: number;
+    private y: number;
+    private size: number;
+    private xSpeed: number = random(-1, 1);
+    private ySpeed: number = random(0, 5);
+    private stopped: boolean = false;
+    private color: string = "white";
 
-    /* TODO REQUIRED - Make this work. The snowflakes should drift slowly downward. I have implemented only the draw() method.
+    constructor(x: number, y: number, size: number, color: string = "white") {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.color = color;
+    }
+
+    public stop() {
+        this.stopped = true;
+    }
+
+    public go() {
+        this.stopped = false;
+    }
+    /* TODO REQUIRED - Make this work. The snowflakes should drift slowly downward.
+     have implemented only the draw() method.
      * You can base the rest of the behavior after bubbles, with only a few changes. */
 
     public draw(): void {
@@ -10,5 +32,10 @@ export class Snowflake {
         line(this.x - this.size / 3, this.y - this.size / 3, this.x + this.size / 3, this.y + this.size / 3);
         line(this.x - this.size / 3, this.y + this.size / 3, this.x + this.size / 3, this.y - this.size / 3);
     }
-
+    public move(): void {
+        if (this.stopped == false) {
+            this.x = this.xSpeed + this.x;
+            this.y = this.ySpeed + this.y;
+        }
+    }
 }

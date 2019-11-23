@@ -28,7 +28,7 @@ import { Bubble } from "./modules/bubble.js";
 import { Snowflake } from "./modules/snowflakes.js";
 
 let balls: Ball[] = [];
-let snowflakes: Snowflake[] = [];
+let flakes: Snowflake[] = [];
 let bubbles: Bubble[] = [];
 let clickedIndex = -1;
 
@@ -37,23 +37,36 @@ function setup() {
     let numBalls = 10;
     let numFlakes = 10;
     createCanvas(500, 500);
-    for (/* TODO REQUIRED - fill this in*/) {
+    for (let i = 0; i < numBalls; i++) {
         balls[i] = new Ball(random(25, width - 25), random(25, height - 25), random(10, 50));
         /* TODO OPTIONAL - make the balls a random color */
     }
-    for (/* TODO REQUIRED  - fill this in*/) {
+    for (let i = 0; i < numBubbles; i++) {
+        bubbles[i] = new Bubble(random(25, width - 25), random(25, height - 25), random(10, 50));
         /* TODO REQUIRED - add the bubbles */
     }
-    for (/* TODO REQUIRED */) {
+    for (let i = 0; i < numFlakes; i++) {
+        flakes[i] = new Snowflake(random(25, width - 25), random(25, height - 25), random(10, 50));
         /* TODO REQUIRED - add the snowflakes */
     }
 }
 
+function randomColor(): string {
+    return "rgb(" + random(1, 256) + ", rgb" + random(1, 256) + ",rgb " + random(1, 256) + ")";
+}
 function draw() {
     background("skyblue");
-    for (/* TODO REQUIRED*/) {
+    for (let i = 0; i < balls.length; i++) {
         balls[i].draw();
         balls[i].move();
+    }
+    for (let i = 0; i < bubbles.length; i++) {
+        bubbles[i].draw();
+        bubbles[i].move();
+    }
+    for (let i = 0; i < flakes.length; i++) {
+        flakes[i].draw();
+        flakes[i].move();
     }
     /* TODO REQUIRED - Draw and move the bubbles and flakes */
 }

@@ -1,3 +1,4 @@
+import { Color } from "p5";
 
 export class Ball {
   private x: number;
@@ -10,7 +11,12 @@ export class Ball {
   private borderColor: string = "black";
 
   /* TODO REQUIRED - add accessors and mutators for x, y, size, color, and borderColor */
-  constructor(x: number, y: number, size: number) {
+  constructor(x: number, y: number, size: number, color: string = "red", borderColor: string = "black") {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.color = color;
+    this.borderColor = borderColor;
     /* TODO REQUIRED = Build your constructor */
     /* TODO OPTIONAL - add optional parameters to set color and borderColor on creation of the object */
   }
