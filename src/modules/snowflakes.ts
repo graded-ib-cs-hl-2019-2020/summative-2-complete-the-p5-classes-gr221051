@@ -1,12 +1,12 @@
+import { flakes } from "../index";
 export class Snowflake {
     private x: number;
     private y: number;
     private size: number;
-    private xSpeed: number = random(-1, 1);
-    private ySpeed: number = random(0, 5);
+    private xSpeed: number = random(-0.5, 0.5);    // snowflakes drift towards the left or right, falling slowly
+    private ySpeed: number = random(0.1, 0.4);
     private stopped: boolean = false;
     private color: string = "white";
-
     constructor(x: number, y: number, size: number, color: string = "white") {
         this.x = x;
         this.y = y;
@@ -21,10 +21,6 @@ export class Snowflake {
     public go() {
         this.stopped = false;
     }
-    /* TODO REQUIRED - Make this work. The snowflakes should drift slowly downward.
-     have implemented only the draw() method.
-     * You can base the rest of the behavior after bubbles, with only a few changes. */
-
     public draw(): void {
         stroke(this.color);
         line(this.x, this.y + this.size / 2, this.x, this.y - this.size / 2);
@@ -36,6 +32,19 @@ export class Snowflake {
         if (this.stopped == false) {
             this.x = this.xSpeed + this.x;
             this.y = this.ySpeed + this.y;
+            this.doBorderBehavior();                            // makes snowflakes refall by reappearing on top
+        }
+    }
+    private doBorderBehavior() {
+        if (this.x < -this.size / 2) {
+            this.x = width + this.size / 2;
+        } else if (this.x > width + this.size / 2) {
+            this.x = -this.size / 2;
+        }
+        if (this.y < -this.size / 2) {
+            this.y = height + this.size / 2;
+        } else if (this.y > height + this.size / 2) {
+            this.y = -this.size / 2;
         }
     }
 }

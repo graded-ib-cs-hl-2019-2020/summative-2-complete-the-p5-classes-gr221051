@@ -1,84 +1,76 @@
-/* Programming Summative 2
-
-    This summative comes in 2 parts.
-
-    Part 1 - Programming
-    ---------------------
-    Your PRIMARY goal is to get the program running. You can find missing elements by looking for comments marked
-    TODO REQUIRED. If they are all fixed, the program should run with 10 red balls, 10 white snowflakes, and
-    10 transluscent bubbles.
-
-    Your SECONDARY goal is to implement the optional TODO requirements and any other fun things you think of.
-
-    Part 2 - Documenting
-    ------------------------
-    Create UML diagrams for all three of these classes, and a flowchart that shows the basic program flow of
-    index.ts. You can do these by hand (be neat!) or using an online tool - draw.io and lucidchart are both nice
-    online offerings.
-
-    For a Proficient, the documentation must be complete and the program must run and be readable.
-        An Approaching might mean incomplete documentation OR hard-to-read code OR not-quite-working code
-        Work your way downwrd from there
-    For an Accomplished , some optional requirements or embellishments are required or the code must be particularly beautiful
-    For an Exemplary, I would expect all optional rquirements to be implemented, or additional features of similar or greter
-        difficulty.
-*/
+import { AUDIO } from "p5";
 import { Ball } from "./modules/ball.js";
 import { Bubble } from "./modules/bubble.js";
 import { Snowflake } from "./modules/snowflakes.js";
-
+export { randomColor };
+export { flakes };
 let balls: Ball[] = [];
 let flakes: Snowflake[] = [];
 let bubbles: Bubble[] = [];
-let clickedIndex = -1;
-
+let clickedIndex = -1;                          // tslint:disable-next-line: max-line-length
+let objectsmoving: boolean = true;             // initial boolean value of the movement of objects: used to keep track of whether balls are stopped
+let stoptimefx = document.getElementById("zaowlrd") as HTMLAudioElement;
+// gets audio for the time stop effect from the html doc
 function setup() {
     let numBubbles = 10;
     let numBalls = 10;
     let numFlakes = 10;
-    createCanvas(500, 500);
+    createCanvas(1260, 635);
     for (let i = 0; i < numBalls; i++) {
         balls[i] = new Ball(random(25, width - 25), random(25, height - 25), random(10, 50));
-        /* TODO OPTIONAL - make the balls a random color */
     }
     for (let i = 0; i < numBubbles; i++) {
         bubbles[i] = new Bubble(random(25, width - 25), random(25, height - 25), random(10, 50));
-        /* TODO REQUIRED - add the bubbles */
     }
     for (let i = 0; i < numFlakes; i++) {
         flakes[i] = new Snowflake(random(25, width - 25), random(25, height - 25), random(10, 50));
-        /* TODO REQUIRED - add the snowflakes */
     }
 }
-
-function randomColor(): string {
-    return "rgb(" + random(1, 256) + ", rgb" + random(1, 256) + ",rgb " + random(1, 256) + ")";
+function randomColor(): string {            // gets a random rgb value
+    return ("rgb(" + Math.floor(random(1, 256)) + "," + Math.floor(random(1, 256)) + "," + Math.floor(random(1, 256)) + ")");
 }
 function draw() {
     background("skyblue");
     for (let i = 0; i < balls.length; i++) {
         balls[i].draw();
         balls[i].move();
+        for (let c = i + 1; c < balls.length; c++) {         // tslint:disable-next-line: max-line-length
+            balls[i].impact(balls[c]);                      // gets the impact function from ball.ts and applies it to both balls if they collide
+        }
     }
     for (let i = 0; i < bubbles.length; i++) {
         bubbles[i].draw();
         bubbles[i].move();
-    }
+        setInterval(function wobble() { bubbles[i].xSpeed = -bubbles[i].xSpeed; }, 900);
+    }               // Makes bubbles wobble: Doesn't work as expected, but works regardless.
     for (let i = 0; i < flakes.length; i++) {
         flakes[i].draw();
         flakes[i].move();
     }
-    /* TODO REQUIRED - Draw and move the bubbles and flakes */
 }
-
-/* TODO OPTIONAL - add a function mousePressed() that either stops or starts objects from moving
-   if the mouse is pressed while it is touching them. So you could use this (if careful!) to stop all of the
-   objects from moving then start them back up again. The Ball class has some helper functions that will
-   help you with this, but you'll need to add them to the other classes.
-*/
-
-// do not edit the below lines
+function mousePressed() {
+    // stops objects if mouse is pressed; if mouse is pressed again, starts movement.
+    if (mouseIsPressed && objectsmoving) {
+        for (let i = 0; i < 10; i++) {              // tslint:disable-next-line: max-line-length
+            stoptimefx.play();                     // if mouse is pressed, plays a sound effect(reference to an anime)(a bit too loud)
+            balls[i].stop();
+            bubbles[i].stop();
+            flakes[i].stop();
+            objectsmoving = false;
+            balls[i].ballcolor = randomColor();     // if mouse is pressed, maked the ball a random color
+        }
+    } else if (mouseIsPressed && !objectsmoving) {
+        for (let i = 0; i < 10; i++) {
+            balls[i].go();
+            balls[i].move();
+            bubbles[i].go();
+            bubbles[i].move();
+            flakes[i].go();
+            flakes[i].move();
+            objectsmoving = true;
+        }
+    }
+}
 window.draw = draw;
 window.setup = setup;
 window.mousePressed = mousePressed;
-window.mouseReleased = mouseReleased;
